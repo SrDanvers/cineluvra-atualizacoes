@@ -2,6 +2,8 @@
 
 Repositório público de distribuição e atualização do **Cineluvra**, criado por Denny Ximenes.
 
+> **Aviso de estabilidade (05/11/2026):** o APK **1.1.1** foi publicado com uma tabela de strings DEX inválida e pode não iniciar. Não instale a 1.1.1. A correção **1.1.2** (versionCode 5) deve ser testada em um aparelho antes da publicação da Release. O validador agora bloqueia DEX fora da ordem exigida e identifica corretamente o certificado exibido pelo apksigner. Não desinstale o aplicativo para evitar perda de dados locais.
+
 - Aplicativo Android: `br.com.dennyximenes.cineluvra`
 - Certificado original esperado (SHA-256): `269da380880d92774b52213e3621c3927a222eb2593c6360bfc07de493066568`
 - Versão inicial: **1.1.1**, `versionCode 4`
@@ -13,7 +15,11 @@ O **Publicador Automático GitHub** distribuído com o APK oficial contém `PUBL
 
 O publicador não guarda credenciais nem publica chaves privadas. Para novos APKs, é necessário manter o pacote, o certificado e aumentar o versionCode. O envio pela integração do ChatGPT não suporta atualmente anexar arquivos binários a Releases, por isso o publicador usa autenticação local segura.
 
-## Publicar a primeira atualização (1.1.1)
+## Publicar correção de inicialização (1.1.2)
+
+Use o pacote de publicação corrigido, contendo `Cineluvra-1.1.2.apk`, primeiro para atualizar e testar o celular, depois para criar a Release `v1.1.2` pelo GitHub CLI. **Não execute novamente o workflow da v1.1.1**, porque essa versão contém código DEX inválido e será rejeitada.
+
+## Publicar a histórica 1.1.1 (não instalar)
 
 1. Baixe o APK oficial `Cineluvra-1.1.1.apk` da conversa com o desenvolvedor.
 2. Abra [Nova Release](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/new).
