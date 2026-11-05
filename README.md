@@ -1,43 +1,43 @@
-# Cineluvra
+<p align="center">
+  <img src="assets/cineluvra-banner.svg" alt="Cineluvra: seu universo de entretenimento. Filmes, séries e animes. Criado por Denny Ximenes." width="100%">
+</p>
 
-**Filmes, séries e animes em um só lugar.**
+<p align="center">
+  <strong>Filmes, séries e animes em um só lugar.</strong>
+</p>
 
-O **Cineluvra** é um aplicativo Android com uma experiência de navegação simples, organizada e voltada para quem gosta de cinema, séries e animes.
+O **Cineluvra** é um aplicativo Android com navegação organizada para explorar filmes, séries e animes, pesquisar títulos e salvar seus favoritos. O aplicativo foi desenvolvido para uma experiência simples e visualmente agradável no celular.
 
-**Criado por Denny Ximenes.**
+## Conheça o Cineluvra
 
-## Conheça o aplicativo
+| Catálogo | Continuar assistindo | Favoritos |
+|:---:|:---:|:---:|
+| ![Catálogo organizado](assets/cineluvra-catalogo.svg) | ![Continuar assistindo](assets/cineluvra-continuar.svg) | ![Favoritos](assets/cineluvra-favoritos.svg) |
+| Explore categorias e descubra títulos. | Volte aos títulos e episódios acessados. | Guarde seus conteúdos preferidos. |
 
-- **Catálogo organizado:** encontre filmes, séries e animes em diferentes categorias.
-- **Pesquisa:** procure títulos de forma prática.
-- **Favoritos:** mantenha seus títulos preferidos em uma lista.
-- **Continuar assistindo:** volte aos títulos acessados e acompanhe seu progresso com os recursos disponíveis no aplicativo.
-- **Visual moderno:** interface organizada e navegação adaptada ao celular.
+Além dessas funções, o aplicativo conta com **pesquisa** para localizar títulos com mais facilidade.
 
-A disponibilidade de reprodução depende das fontes de vídeo utilizadas.
+*As imagens desta página são artes ilustrativas originais. Não representam capturas de tela reais nem garantem a disponibilidade de reprodução dos títulos.*
 
-## Baixar o Cineluvra para Android
+## Download oficial para Android
 
-Acesse a página oficial de downloads:
+### [Baixar a versão mais recente do Cineluvra](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/latest)
 
-**[Baixar a versão mais recente do Cineluvra](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/latest)**
+Na página de download, abra a seção **Assets** e selecione o arquivo `.apk`.
 
-Na página, abra **Assets** e selecione o arquivo `.apk` da versão mais recente.
+**Versão publicada: 1.1.3** — atualização de recuperação que corrigiu a falha de abertura relatada anteriormente.
 
-### Versão estável
-
-**Cineluvra 1.1.3** — atualização de recuperação que corrigiu a falha de abertura relatada na versão anterior.
-
-**[Ver detalhes da versão 1.1.3](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v1.1.3)**
+[Detalhes da versão 1.1.3](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v1.1.3)
 
 ## Atualizações
 
-As versões oficiais do Cineluvra são disponibilizadas na área de **Releases** deste repositório. Confira essa área para conhecer as novidades e obter as atualizações.
+As atualizações oficiais são disponibilizadas na seção **Releases**. Verifique as novidades antes de instalar uma nova versão.
 
-## Créditos
-
-**Desenvolvimento e criação: Denny Ximenes.**
+A reprodução dos conteúdos depende da disponibilidade das fontes de vídeo utilizadas.
 
 ---
 
-*Página oficial do aplicativo Cineluvra.*
+<p align="center">
+  <strong>CRIADO POR DENNY XIMENES</strong><br>
+  <sub>Cineluvra — Aplicativo Android</sub>
+</p>
