@@ -7,6 +7,12 @@ Repositório público de distribuição e atualização do **Cineluvra**, criado
 - Versão inicial: **1.1.1**, `versionCode 4`
 - Manifesto após a publicação válida: [update.json](https://raw.githubusercontent.com/SrDanvers/cineluvra-atualizacoes/main/update.json)
 
+## Alternativa simples: publicador para Windows
+
+O **Publicador Automático GitHub** distribuído com o APK oficial contém `PUBLICAR_CINELUVRA.bat` e `Publicar-Cineluvra.ps1`. Execute o arquivo BAT no computador Windows, autorize o GitHub CLI pelo navegador apenas na primeira vez e o script criará a Release com o APK, usando a conta `SrDanvers`. A publicação dispara o workflow deste repositório.
+
+O publicador não guarda credenciais nem publica chaves privadas. Para novos APKs, é necessário manter o pacote, o certificado e aumentar o versionCode. O envio pela integração do ChatGPT não suporta atualmente anexar arquivos binários a Releases, por isso o publicador usa autenticação local segura.
+
 ## Publicar a primeira atualização (1.1.1)
 
 1. Baixe o APK oficial `Cineluvra-1.1.1.apk` da conversa com o desenvolvedor.
