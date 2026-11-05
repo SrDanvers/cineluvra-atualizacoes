@@ -1,0 +1,10 @@
+Cineluvra 1.1.1 — Integração GitHub
+
+- Verificação de atualizações no início e pelo botão manual.
+- Player com menu único de controles.
+- Continuar assistindo para filmes, séries e animes (progressos permitidos pelo provedor ou registrados manualmente).
+- Organização de lançamentos.
+- Pacote: br.com.dennyximenes.cineluvra
+- VersionCode: 4
+
+Criado por Denny Ximenes.
