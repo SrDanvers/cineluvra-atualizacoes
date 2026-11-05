@@ -1,0 +1,10 @@
+*.apk
+*.zip
+*.p12
+*.jks
+*.keystore
+*storepass*
+__pycache__/
+release_files/
+release-notes.txt
+apksigner.txt
