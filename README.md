@@ -25,9 +25,9 @@ A Release `v1.1.1` permanece como registro histórico, mas não é recomendada. 
 
 ## Próximas versões
 
-Para publicar `v1.1.2`, gere o APK `Cineluvra-1.1.2.apk` com `versionCode 5`, **mesmo identificador do aplicativo e mesma assinatura original**; crie uma nova Release com esse APK. O workflow valida o APK e publica automaticamente o manifesto. Não reenvie um APK modificado com o mesmo `versionCode`.
+Para publicar `v1.1.4` ou superior, gere o APK com `versionCode` **maior que 6**, preservando **o identificador, o certificado original e o DEX nativo validado**. O workflow valida o APK antes de publicar o manifesto. Mudanças no código Android nativo exigem revisão explícita do validador e testes reais. Nunca modifique o APK de uma versão já publicada.
 
-O aplicativo 1.1.1 consulta o manifesto quando a verificação é acionada. Uma versão com código maior exibe aviso para baixar a atualização e abrir a instalação usando o Android, sempre com confirmação do usuário.
+A versão 1.1.3 mantém a interface de verificação no HTML; a atualização é baixada pelo navegador com confirmação da instalação pelo Android. Teste essa função no dispositivo depois que `update.json` for publicado.
 
 ## Proteção do projeto
 
@@ -38,4 +38,4 @@ O aplicativo 1.1.1 consulta o manifesto quando a verificação é acionada. Uma 
 - O GitHub gera o manifesto; a instalação do APK exige confirmação do Android.
 - O hash SHA-256 é gerado no workflow, mas a versão 1.1.1 ainda não confere localmente o hash do arquivo baixado pelo navegador.
 - A atualização do catálogo de filmes e séries exige gerar um novo APK.
-- A primeira Release ainda precisa ser publicada antes de afirmar que o fluxo ponta a ponta funciona.
+- A primeira **Release segura** (1.1.3) ainda precisa ser publicada e verificada. A Release antiga 1.1.1 permanece como histórico de falha.
