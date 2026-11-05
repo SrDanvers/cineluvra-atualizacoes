@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "applicationId": "br.com.dennyximenes.cineluvra",
+  "latestVersionCode": 6,
+  "latestVersionName": "1.1.3",
+  "webVersion": "1.1.3",
+  "apkUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v1.1.3/Cineluvra-1.1.3.apk",
+  "sha256": "9c28747cf5cf61c31b8279575ee2f3bf01e86f06c119efc9c23990b13a12ccdc",
+  "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v1.1.3",
+  "releaseNotes": "Atualizacao 1.1.3 do Cineluvra. Criado por Denny Ximenes.",
+  "publishedAt": "2026-11-05T03:33:11+00:00"
+}
