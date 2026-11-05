@@ -14,6 +14,8 @@ import zipfile
 APP_ID = "br.com.dennyximenes.cineluvra"
 REPOSITORY = "SrDanvers/cineluvra-atualizacoes"
 CERT_SHA256 = "269da380880d92774b52213e3621c3927a222eb2593c6360bfc07de493066568"
+APPROVED_NATIVE_DEX_SHA256 = "d43c18ed0f3759601bcd0b12e85e9622176560cf90ba32899450bee9e4e00b81"
+MIN_SAFE_CODE = 6  # 1.1.3: recuperacao confirmada pelo usuario
 
 def fail(message):
     raise SystemExit("FALHA: " + message)
@@ -128,9 +130,12 @@ with zipfile.ZipFile(apk) as z:
     if attrs.get("versionName") != version:
         fail("Versão do aplicativo diferente da tag")
     code = attrs.get("versionCode")
-    if not isinstance(code, int) or code < 4:
-        fail("versionCode precisa ser maior ou igual a 4")
-    verify_dex(z.read("classes.dex"))
+    if not isinstance(code, int) or code < MIN_SAFE_CODE:
+        fail("Versao bloqueada: 1.1.1 e 1.1.2 apresentam falhas. Use versionCode >= 6.")
+    native_dex = z.read("classes.dex")
+    verify_dex(native_dex)
+    if hashlib.sha256(native_dex).hexdigest() != APPROVED_NATIVE_DEX_SHA256:
+        fail("Codigo nativo diferente da versao estavel 1.0.1/1.1.3. Revisao manual obrigatoria antes de liberar novo DEX.")
     html = z.read("assets/index.html")
     if len(html) < 300000 or version.encode("utf-8") not in html:
         fail("Conteúdo da versão ausente ou inesperado")
