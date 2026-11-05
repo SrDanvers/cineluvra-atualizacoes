@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import struct
+import zlib
 from urllib.parse import quote
 import zipfile
 
@@ -60,6 +61,37 @@ def axml_attributes(data):
         offset += size
     fail("Não foi possível ler o AndroidManifest.xml")
 
+
+def verify_dex(dex):
+    """Impede publicação de DEX inválido, inclusive strings fora de ordem."""
+    if not dex.startswith(b"dex\n") or len(dex) < 112:
+        fail("Arquivo classes.dex inválido")
+    if struct.unpack_from("<I", dex, 8)[0] != (zlib.adler32(dex[12:]) & 0xffffffff):
+        fail("Checksum DEX inválido")
+    if dex[12:32] != hashlib.sha1(dex[32:]).digest():
+        fail("SHA-1 DEX inválido")
+    count, base = struct.unpack_from("<II", dex, 0x38)
+    if not 0 < count < 200000 or base + count * 4 > len(dex):
+        fail("Tabela de strings DEX inválida")
+    last = None
+    for i in range(count):
+        pos = struct.unpack_from("<I", dex, base + i*4)[0]
+        if pos >= len(dex):
+            fail("Offset DEX inválido")
+        while pos < len(dex) and dex[pos] >= 128:
+            pos += 1
+        pos += 1
+        if pos >= len(dex):
+            fail("Comprimento de string DEX inválido")
+        try:
+            end = dex.index(0, pos)
+            value = dex[pos:end].decode("utf-8", errors="replace")
+        except ValueError:
+            fail("Terminação de string DEX ausente")
+        if last is not None and last > value:
+            fail("Tabela de strings DEX fora de ordem; aplicativo pode não iniciar")
+        last = value
+
 p = argparse.ArgumentParser()
 p.add_argument("--apk", required=True)
 p.add_argument("--tag", required=True)
@@ -98,12 +130,13 @@ with zipfile.ZipFile(apk) as z:
     code = attrs.get("versionCode")
     if not isinstance(code, int) or code < 4:
         fail("versionCode precisa ser maior ou igual a 4")
+    verify_dex(z.read("classes.dex"))
     html = z.read("assets/index.html")
     if len(html) < 300000 or version.encode("utf-8") not in html:
         fail("Conteúdo da versão ausente ou inesperado")
 
 signer_output = Path(args.apksigner_output_file).read_text(encoding="utf-8")
-m = re.search(r"Signer #1 certificate SHA-256 digest:\s*([a-fA-F0-9]{64})", signer_output)
+m = re.search(r"(?:Signer #1|V2 Signer):? certificate SHA-256 digest:\s*([a-fA-F0-9]{64})", signer_output)
 if not m or m.group(1).lower() != CERT_SHA256:
     fail("Assinatura diferente da original")
 sha256 = hashlib.sha256(apk.read_bytes()).hexdigest()
