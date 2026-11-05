@@ -1,0 +1,73 @@
+name: Publicar atualização Cineluvra
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag da Release existente, exemplo v1.1.1"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cineluvra-update-manifest
+  cancel-in-progress: false
+
+jobs:
+  validar-e-publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter arquivos públicos
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Baixar APK da Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          set -euo pipefail
+          test -n "$RELEASE_TAG"
+          echo "RELEASE_TAG=$RELEASE_TAG" >> "$GITHUB_ENV"
+          mkdir -p release_files
+          gh release download "$RELEASE_TAG" --pattern '*.apk' --dir release_files --clobber
+          gh release view "$RELEASE_TAG" --json body --jq '.body' > release-notes.txt
+          test "$(find release_files -maxdepth 1 -type f -name '*.apk' | wc -l)" -eq 1
+          echo "RELEASE_APK=$(find release_files -maxdepth 1 -type f -name '*.apk' | head -n 1)" >> "$GITHUB_ENV"
+
+      - name: Verificar certificado e assinatura APK
+        run: |
+          set -euo pipefail
+          APK_SIGNER=$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)
+          test -n "$APK_SIGNER"
+          "$APK_SIGNER" verify --verbose --print-certs "$RELEASE_APK" | tee apksigner.txt
+
+      - name: Validar versão, pacote e SHA-256
+        run: |
+          set -euo pipefail
+          python3 scripts/publish_manifest.py \
+            --apk "$RELEASE_APK" \
+            --tag "$RELEASE_TAG" \
+            --notes-file release-notes.txt \
+            --apksigner-output-file apksigner.txt \
+            --existing update.json --out update.json \
+            --repository "$GITHUB_REPOSITORY"
+
+      - name: Atualizar manifesto na branch main
+        run: |
+          set -euo pipefail
+          git config user.name "Cineluvra Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add update.json
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração no manifesto"
+          else
+            git commit -m "Publicar atualização Cineluvra $RELEASE_TAG"
+            git push origin HEAD:main
+          fi
