@@ -1,0 +1,72 @@
+name: Publicar APK validado do Cineluvra
+
+on:
+  push:
+    branches: [main]
+    paths: ['publication/v2.0.9/manifest.json']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cineluvra-release-2-0-9
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter pacote aprovado
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Conferir integridade do pacote
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p = json.loads(Path('publication/v2.0.9/manifest.json').read_text())
+          apk = Path('publication/v2.0.9/Cineluvra-2.0.9.apk')
+          assert p['version'] == '2.0.9' and p['versionCode'] == 21
+          assert apk.stat().st_size == p['size']
+          assert hashlib.sha256(apk.read_bytes()).hexdigest() == p['sha256']
+          PY
+
+      - name: Validar assinatura e manifesto antes de publicar
+        run: |
+          set -euo pipefail
+          SIGNER=$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -n 1)
+          test -n "$SIGNER"
+          "$SIGNER" verify --verbose --print-certs publication/v2.0.9/Cineluvra-2.0.9.apk > apksigner.txt
+          python3 scripts/publish_manifest.py --apk publication/v2.0.9/Cineluvra-2.0.9.apk --tag v2.0.9 --notes-file NOTAS_RELEASE_2.0.9.md --apksigner-output-file apksigner.txt --existing update.json --out candidate-update.json --repository "$GITHUB_REPOSITORY"
+
+      - name: Publicar APK na Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if ! gh release view v2.0.9 --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release create v2.0.9 --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title 'Cineluvra 2.0.9 — Capítulos em ordem' --notes-file NOTAS_RELEASE_2.0.9.md --draft
+          fi
+          gh release upload v2.0.9 publication/v2.0.9/Cineluvra-2.0.9.apk --repo "$GITHUB_REPOSITORY" --clobber
+          gh release edit v2.0.9 --repo "$GITHUB_REPOSITORY" --draft=false --latest --title 'Cineluvra 2.0.9 — Capítulos em ordem' --notes-file NOTAS_RELEASE_2.0.9.md
+
+      - name: Conferir arquivo publicado e ativar atualização
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p verify-release
+          gh release download v2.0.9 --repo "$GITHUB_REPOSITORY" --pattern 'Cineluvra-2.0.9.apk' --dir verify-release
+          cmp publication/v2.0.9/Cineluvra-2.0.9.apk verify-release/Cineluvra-2.0.9.apk
+          git config user.name 'Cineluvra Actions'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          cp candidate-update.json update.json
+          git add update.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'release: ativar Cineluvra 2.0.9 após validar APK publicado'
+            git push origin HEAD:main
+          fi
