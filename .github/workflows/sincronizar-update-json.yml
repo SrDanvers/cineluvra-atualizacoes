@@ -1,0 +1,102 @@
+name: Sincronizar update.json com a release do APK
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag da release (vazio = release mais recente)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cineluvra-update-manifest
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || !github.event.release.prerelease }}
+    steps:
+      - name: Obter o repositorio na branch main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Preparar a release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
+          EVENT_TAG: ${{ github.event.release.tag_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${EVENT_TAG:-${INPUT_TAG:-}}"
+          if [[ -z "$tag" ]]; then
+            tag="$(gh release view --json tagName -q .tagName)"
+          fi
+          gh release view "$tag" --json isPrerelease -q .isPrerelease | grep -qx false
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          mkdir -p ./release-apk
+          gh release download "$tag" --pattern '*.apk' --dir ./release-apk
+          mapfile -d '' apks < <(find ./release-apk -maxdepth 1 -type f -iname '*.apk' -print0)
+          if [[ "${#apks[@]}" -ne 1 ]]; then
+            echo "::error::A release precisa conter exatamente um APK para atualizacao (encontrados: ${#apks[@]})."
+            exit 1
+          fi
+          echo "apk=${apks[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Extrair versao assinada do APK e atualizar manifesto
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+          APK: ${{ steps.release.outputs.apk }}
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          aapt="$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f -name aapt | sort -V | tail -n 1)"
+          test -x "$aapt" || { echo "::error::Ferramenta Android aapt indisponivel"; exit 1; }
+          "$aapt" dump badging "$APK" > apk-badging.txt
+          python3 - <<'PY'
+          import hashlib, json, os, re, pathlib, urllib.parse
+          badging = pathlib.Path("apk-badging.txt").read_text()
+          m = re.search(r"^package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'", badging, re.M)
+          if not m:
+              raise SystemExit("Erro: nao foi possivel extrair pacote e versao do APK")
+          pkg, code, version = m.group(1), int(m.group(2)), m.group(3)
+          tag = os.environ["TAG"]
+          if tag.lstrip("v") != version:
+              raise SystemExit(f"Erro: versao APK {version} nao corresponde a tag {tag}")
+          file = pathlib.Path("update.json")
+          current = json.loads(file.read_text(encoding="utf-8"))
+          if pkg != current["applicationId"]:
+              raise SystemExit(f"Erro: package inesperado {pkg}")
+          previous_code = int(current.get("latestVersionCode", 0))
+          if code < previous_code:
+              raise SystemExit("Erro: versao mais antiga, atualizacao bloqueada")
+          apk = pathlib.Path(os.environ["APK"])
+          sha = hashlib.sha256(apk.read_bytes()).hexdigest()
+          release_url = f"https://github.com/{os.environ['REPO']}/releases/tag/{urllib.parse.quote(tag)}"
+          download_url = f"https://github.com/{os.environ['REPO']}/releases/download/{urllib.parse.quote(tag)}/{urllib.parse.quote(apk.name)}"
+          current.update(latestVersionCode=code, latestVersionName=version,
+                         webVersion=version, apkUrl=download_url, sha256=sha,
+                         releaseUrl=release_url)
+          file.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print("Manifesto validado:", version, code, apk.name, sha)
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add update.json
+          if git diff --cached --quiet; then
+            echo "update.json ja sincronizado"
+          else
+            git commit -m "fix(cineluvra): atualizar manifesto para $TAG"
+            git push origin HEAD:main
+          fi
