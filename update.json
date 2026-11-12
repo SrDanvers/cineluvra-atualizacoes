@@ -8,5 +8,28 @@
   "sha256": "ddd8a2a75062b24c2d6a03f730a2db306593dfc6e164a42d07b2bee3933ff95c",
   "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.6",
   "releaseNotes": "Cineluvra 2.0.6 — Playlist TV ZYN e melhorias de Chiquititas. Versão oficial atualmente publicada no GitHub.",
-  "publishedAt": "2026-11-06T20:48:13Z"
+  "publishedAt": "2026-11-06T20:48:13Z",
+  "latestPreview": {
+    "version": "2.0.9",
+    "versionCode": 21,
+    "prerelease": true,
+    "apkUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v2.0.9/Cineluvra-2.0.9.apk",
+    "sha256": "94b847ed4fce8da5fb7e81eb128983b5327dc79baaf20daa5c861a8ddfc8ebb6",
+    "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.9",
+    "publishedAt": "2026-11-12T16:35:14Z",
+    "warning": "Versao de teste com assinatura distinta da release 2.0.6; nao oferecer como atualizacao in-place ate assinatura/package serem compatibilizados."
+  },
+  "historicalPrereleases": [
+    {
+      "version": "2.0.7",
+      "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.7",
+      "apkUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v2.0.7/Cineluvra-2.0.7.apk"
+    },
+    {
+      "version": "2.0.8",
+      "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.8",
+      "apkUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v2.0.8/Cineluvra-2.0.8.apk",
+      "sha256": "46a49aae89c1fe2c9b5998c378d8fc174bc32bdb627ac6da79c1b0a291972c96"
+    }
+  ]
 }
