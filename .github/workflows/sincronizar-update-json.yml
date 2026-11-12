@@ -72,7 +72,7 @@ jobs:
               raise SystemExit("Erro: nao foi possivel extrair pacote e versao do APK")
           pkg, code, version = m.group(1), int(m.group(2)), m.group(3)
           tag = os.environ["TAG"]
-          if tag.lstrip("v") != version:
+          if not (version == tag.lstrip("v") or version.startswith(tag.lstrip("v") + "-")):
               raise SystemExit(f"Erro: versao APK {version} nao corresponde a tag {tag}")
           file = pathlib.Path("update.json")
           current = json.loads(file.read_text(encoding="utf-8"))
@@ -86,7 +86,7 @@ jobs:
           release_url = f"https://github.com/{os.environ['REPO']}/releases/tag/{urllib.parse.quote(tag)}"
           download_url = f"https://github.com/{os.environ['REPO']}/releases/download/{urllib.parse.quote(tag)}/{urllib.parse.quote(apk.name)}"
           current.update(latestVersionCode=code, latestVersionName=version,
-                         webVersion=version, apkUrl=download_url, sha256=sha,
+                         webVersion=tag.lstrip("v"), apkUrl=download_url, sha256=sha,
                          releaseUrl=release_url)
           file.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print("Manifesto validado:", version, code, apk.name, sha)
