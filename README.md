@@ -25,13 +25,13 @@ Além dessas funções, o aplicativo conta com **pesquisa** para localizar títu
 
 Na página de download, abra a seção **Assets** e selecione o arquivo `.apk`.
 
-**Versão publicada: 1.1.3** — atualização de recuperação que corrigiu a falha de abertura relatada anteriormente.
+**Versão oficial publicada: 2.0.6** — APK disponível na Release v2.0.6. O arquivo `update.json` reflete a versão publicada.
 
-[Detalhes da versão 1.1.3](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v1.1.3)
+[Detalhes da versão 2.0.6](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.6)
 
 ## Atualizações
 
-As atualizações oficiais são disponibilizadas na seção **Releases**. Verifique as novidades antes de instalar uma nova versão.
+As atualizações oficiais são disponibilizadas na seção **Releases**. O `update.json` é sincronizado com a publicação oficial. Os projetos de desenvolvimento 2.0.8 e 2.0.9 estão guardados separadamente, não constam como versões oficiais publicadas. A versão 2.1.0 está em preparação. O arquivo `catalogo-extra.json` permite adicionar metadados de novos títulos por atualização remota, sem autorizar reprodução de obras protegidas.
 
 A reprodução dos conteúdos depende da disponibilidade das fontes de vídeo utilizadas.
 
