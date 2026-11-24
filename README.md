@@ -21,17 +21,15 @@ Além dessas funções, o aplicativo conta com **pesquisa** para localizar títu
 
 ## Download oficial para Android
 
-### [Baixar a versão mais recente do Cineluvra](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/latest)
+### [Baixar Cineluvra 2.2.1.apk](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v2.2.1/Cineluvra-2.2.1.apk)
 
-Na página de download, abra a seção **Assets** e selecione o arquivo `.apk`.
+**Versão oficial publicada: 2.2.1**. O arquivo `update.json` reflete a versão publicada.
 
-**Versão oficial publicada: 2.0.6** — APK disponível na Release v2.0.6. O arquivo `update.json` reflete a versão publicada.
-
-[Detalhes da versão 2.0.6](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.0.6)
+[Detalhes da versão 2.2.1](https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.2.1)
 
 ## Atualizações
 
-As atualizações oficiais são disponibilizadas na seção **Releases**. O `update.json` é sincronizado com a publicação oficial. Os projetos de desenvolvimento 2.0.8 e 2.0.9 estão guardados separadamente, não constam como versões oficiais publicadas. A versão 2.1.0 está em preparação. O arquivo `catalogo-extra.json` permite adicionar metadados de novos títulos por atualização remota, sem autorizar reprodução de obras protegidas.
+As atualizações oficiais são disponibilizadas na seção **Releases**. O `update.json` é sincronizado com a publicação oficial. O arquivo `catalogo-extra.json` permite adicionar metadados de novos títulos por atualização remota, sem autorizar reprodução de obras protegidas.
 
 A reprodução dos conteúdos depende da disponibilidade das fontes de vídeo utilizadas.
 
