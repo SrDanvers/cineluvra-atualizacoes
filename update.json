@@ -7,8 +7,8 @@
   "apkUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/download/v2.2.1/Cineluvra-2.2.1.apk",
   "sha256": "8ba6edd642d2b6d2a99fc9815f72f7e159939fb960b8a986ab5e8fc3a08f6cb9",
   "releaseUrl": "https://github.com/SrDanvers/cineluvra-atualizacoes/releases/tag/v2.2.1",
-  "releaseNotes": "Cineluvra 2.0.6 — Playlist TV ZYN e melhorias de Chiquititas. Versão oficial atualmente publicada no GitHub.",
-  "publishedAt": "2026-11-06T20:48:13Z",
+  "releaseNotes": "Corrige o toque nos cinco ícones da barra inferior. Inclui Top 10 de filmes no Início e telas separadas para Criador e Sobre.",
+  "publishedAt": "2026-11-24T14:40:54Z",
   "latestPreview": {
     "version": "2.0.9",
     "versionCode": 21,
